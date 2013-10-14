@@ -5,10 +5,13 @@ CC=gcc
 CSFLAGS=-c -Wall
 
 
-all : cellular_automata
+all : cell_automata
 
-cellular_automata: main.o
-	$(CC) main.o -o obj/main
+cell_automata: main.o cellular_automata.o
+	$(CC) main.o cellular_automata.o -o obj/main
+
+cellular_automata.o: src/cellular_automata.c src/cellular_automata.h
+	$(CC) $(CSFLAGS) src/cellular_automata.c 
 
 main.o: src/main.c
 	$(CC) $(CSFLAGS) src/main.c
