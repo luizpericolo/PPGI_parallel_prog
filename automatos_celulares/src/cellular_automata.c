@@ -25,6 +25,7 @@ int* create_random_initial_population()
 void print_grid(int *grid)
 {
     /* This function iterates over the grid and prints it in a matricial fashion. */
+    
     int i, j;
     for(i=0; i<GRID_WIDTH; i++)
     {
@@ -32,46 +33,103 @@ void print_grid(int *grid)
         {
             printf("%d", grid[(i * GRID_WIDTH) + j]);
         }
+
         printf("\n");
     }
+
 }
 
 
 int count_neighbors(int *grid, int x)
 {
-    /* This functions counts how many neighbors equal to 1 a cell has. */
-    /* For now we are considering a neighborhood of 4 instead of 9. */
+    /* This functions counts how many neighbors equal to 1 a cell has (in all 8 directions!). */
 
     int count = 0;
 
     // Checking for the East Neighbor.
     if(x % GRID_WIDTH != GRID_WIDTH - 1)
     {
+        
         if(grid[x + 1] == 1)
+        {
             count++;
+        }
     }
 
     // Checking for the West Neighbor.
     if(x % GRID_WIDTH != 0)
     {
+        
         if(grid[x - 1] == 1)
+        {
             count++;
+        }
     }
 
     // Checking for the North Neighbor.
-    if(x - GRID_WIDTH > 0)
+    if(x - GRID_WIDTH >= 0)
     {
+        
         if(grid[x - GRID_WIDTH] == 1)
+        {
             count++;
+        }
+
+        // Checking for the Northwest Neighbor.
+        if((x - GRID_WIDTH - 1) % GRID_WIDTH != GRID_WIDTH - 1  && x - GRID_WIDTH - 1 >= 0)
+        {
+            
+            if(grid[x - GRID_WIDTH - 1] == 1)
+            {
+                count++;
+            }
+                
+        }
+
+        // Checking for the Northeast Neighbor.
+        if((x - GRID_WIDTH + 1) % GRID_WIDTH != 0)
+        {
+            
+            if(grid[x - GRID_WIDTH + 1] == 1)
+            {
+                count++;
+            }
+                
+        }
     }
 
     // Checking for the South Neighbor.
-    if(x + GRID_WIDTH > 0)
+    if(x + GRID_WIDTH < CELL_COUNT)
     {
+        
         if(grid[x + GRID_WIDTH] == 1)
+        {
             count++;
-    }
+        }
+            
 
+        // Checking for the Southwest Neighbor.
+        if((x + GRID_WIDTH - 1) % GRID_WIDTH != GRID_WIDTH - 1)
+        {
+            
+            if(grid[x + GRID_WIDTH - 1])
+            {
+                count++;
+            }
+                
+        }
+
+        // Checking for the Southeast Neighbor.
+        if((x + GRID_WIDTH + 1) % GRID_WIDTH != 0 && x + GRID_WIDTH + 1 < CELL_COUNT)
+        {
+            
+            if(grid[x + GRID_WIDTH + 1])
+            {
+                count++;
+            }
+                
+        }
+    }
     return count;
 }
 
