@@ -6,6 +6,7 @@
 
 
 #include "cellular_automata.h"
+#include "cellular_automata_gfx.h"
 
 
 int main(void)
@@ -23,8 +24,10 @@ int main(void)
     for(i=0; i<CELL_COUNT; i++)
     {
         n = count_neighbors(grid,i);
-        printf("Posicao [%d] tem %d vizinhos.\n", i, n);
+        //printf("Posicao [%d] tem %d vizinhos.\n", i, n);
     }
+
+    show_screen();
 
     return 0;
 }
