@@ -2,6 +2,7 @@
 #include<time.h>
 #include<stdlib.h>
 #include<stdio.h>
+
 #include "cellular_automata.h"
 
 int* create_random_initial_population()
@@ -12,11 +13,26 @@ int* create_random_initial_population()
 	srand(time(NULL));
 
 	int i = 0;
+
+    int count = 0;
 	
     for(i=0; i<CELL_COUNT; i++)
 	{
-	    grid[i] = rand() % 2;
+	    if(rand()%100 < FILL_PROB)
+        {
+            grid[i] = 1;
+            count++;
+        }
+        else
+        {
+            grid[i] = 0;
+        }
+            
     }
+
+    printf("Number of walls: %d\n", count);
+    printf("Number of cells: %d\n", CELL_COUNT);
+    printf("Percentage of Walls: %.2f\n", 1.0 * count/CELL_COUNT);
 
     return grid;
 }
@@ -36,6 +52,8 @@ void print_grid(int *grid)
 
         printf("\n");
     }
+
+    printf("\n");
 
 }
 
@@ -133,3 +151,72 @@ int count_neighbors(int *grid, int x)
     return count;
 }
 
+int * apply_cave_generation_rule(int *grid)
+{
+    int* next_gen = malloc (CELL_COUNT * sizeof(int));
+
+    int i;
+
+    int n_count = 0;
+
+    for(i=0; i<CELL_COUNT; i++)
+    {
+        n_count = count_neighbors(grid, i);
+
+        
+        // Applying the B678 rule.
+        if(grid[i] == 0)
+        {
+            if((n_count == 6) || (n_count == 7) || (n_count == 8))
+                next_gen[i] = 1;
+            else
+                next_gen[i] = grid[i];
+        }
+
+        // Applying the S345678
+        if(grid[i] == 1)
+        {
+            if((n_count == 0) || (n_count == 1) || (n_count == 2))
+                next_gen[i] = 0;
+            else
+                next_gen[i] = grid[i];
+        }
+    }
+
+    return next_gen;
+}
+
+int * apply_4_5_rule(int *grid)
+{
+    /* B5678/S45678 */
+    int* next_gen = malloc (CELL_COUNT * sizeof(int));
+
+    int i;
+
+    int n_count = 0;
+
+    for(i=0; i<CELL_COUNT; i++)
+    {
+        n_count = count_neighbors(grid, i);
+
+        // Applying the B5678 rule.
+        if(grid[i] == 0)
+        {
+            if((n_count == 5) || (n_count == 6) || (n_count == 7) || (n_count == 8))
+                next_gen[i] = 1;
+            else
+                next_gen[i] = grid[i];
+        }
+
+        // Applying the S45678
+        if(grid[i] == 1)
+        {
+            if((n_count == 0) || (n_count == 1) || (n_count == 2) || (n_count == 3))
+                next_gen[i] = 0;
+            else
+                next_gen[i] = grid[i];
+        }
+    }
+
+    return next_gen;   
+}
