@@ -8,16 +8,17 @@ CSFLAGS=-c -Wall
 all : cell_automata
 
 cell_automata: main.o cellular_automata.o
-	$(CC) main.o cellular_automata.o -o obj/main
+	$(CC) obj/main.o obj/cellular_automata.o -o exe/main
 
 cellular_automata.o: src/cellular_automata.c src/cellular_automata.h
-	$(CC) $(CSFLAGS) src/cellular_automata.c 
+	$(CC) $(CSFLAGS) src/cellular_automata.c -o obj/cellular_automata.o
 
 main.o: src/main.c
-	$(CC) $(CSFLAGS) src/main.c
+	$(CC) $(CSFLAGS) src/main.c -o obj/main.o
 
 clean:
 	rm -rf obj/*
+	rm -rf exe/*
 
 # Target that should install the dependencies in devian based linux distros.
 deb-deps:
