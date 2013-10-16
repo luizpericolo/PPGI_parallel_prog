@@ -7,14 +7,21 @@
 void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination)
 {
     //Temporary rectangle to hold the offsets
-    SDL_Rect offset;
-    
-    //Get the offsets
-    offset.x = x;
-    offset.y = y;
+    SDL_Rect dest;
+    SDL_Rect src;
+
+    src.x = 0;
+    src.y = 0;
+    src.w = CELL_WIDTH;
+    src.h = CELL_HEIGHT;
+
+
+    //Set the destination
+    dest.x = x;
+    dest.y = y;
     
     //Blit the surface
-    SDL_BlitSurface(source, NULL, destination, &offset);
+    SDL_BlitSurface(source, &src, destination, &dest);
 }
 
 
@@ -43,8 +50,8 @@ SDL_Surface* draw_grid(int* grid, SDL_Surface *screen)
         if(grid[i] == 1)
         {
 
-            x = ((i % GRID_WIDTH) * 16) + 1;
-            y = ((i / GRID_WIDTH) * 16) + 1;
+            x = ((i % GRID_WIDTH) * CELL_WIDTH) + 1;
+            y = ((i / GRID_WIDTH) * CELL_WIDTH) + 1;
 
             apply_surface(x, y, cell, screen);
         }
@@ -52,8 +59,8 @@ SDL_Surface* draw_grid(int* grid, SDL_Surface *screen)
         // Adding the top border.
         if(i / GRID_WIDTH == 0)
         {
-            x = ((i % GRID_WIDTH) * 16) + 1;
-            y = ((i / GRID_WIDTH) * 16) + 1;
+            x = ((i % GRID_WIDTH) * CELL_WIDTH) + 1;
+            y = ((i / GRID_WIDTH) * CELL_WIDTH) + 1;
 
             apply_surface(x, y, cell, screen);
         }
@@ -61,8 +68,8 @@ SDL_Surface* draw_grid(int* grid, SDL_Surface *screen)
         // Adding the left border.
         if(i % GRID_WIDTH == 0)
         {
-            x = ((i % GRID_WIDTH) * 16) + 1;
-            y = ((i / GRID_WIDTH) * 16) + 1;
+            x = ((i % GRID_WIDTH) * CELL_WIDTH) + 1;
+            y = ((i / GRID_WIDTH) * CELL_WIDTH) + 1;
 
             apply_surface(x, y, cell, screen);
         }
@@ -70,8 +77,8 @@ SDL_Surface* draw_grid(int* grid, SDL_Surface *screen)
         // Adding the right border.
         if(i % GRID_WIDTH == GRID_WIDTH - 1)
         {
-            x = ((i % GRID_WIDTH) * 16) + 1;
-            y = ((i / GRID_WIDTH) * 16) + 1;
+            x = ((i % GRID_WIDTH) * CELL_WIDTH) + 1;
+            y = ((i / GRID_WIDTH) * CELL_WIDTH) + 1;
 
             apply_surface(x, y, cell, screen);
         }
@@ -79,8 +86,8 @@ SDL_Surface* draw_grid(int* grid, SDL_Surface *screen)
         // Adding the bottom border.
         if(i / GRID_WIDTH == GRID_WIDTH - 1)
         {
-            x = ((i % GRID_WIDTH) * 16) + 1;
-            y = ((i / GRID_WIDTH) * 16) + 1;
+            x = ((i % GRID_WIDTH) * CELL_WIDTH) + 1;
+            y = ((i / GRID_WIDTH) * CELL_WIDTH) + 1;
 
             apply_surface(x, y, cell, screen);
         }
