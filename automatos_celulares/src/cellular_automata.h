@@ -4,6 +4,8 @@
 #define CELL_COUNT GRID_WIDTH * GRID_HEIGHT
 #define FILL_PROB 45
 
+#define CELL_WIDTH 8
+#define CELL_HEIGHT 8
 
 int* create_random_initial_population();
 void print_grid(int *grid);
