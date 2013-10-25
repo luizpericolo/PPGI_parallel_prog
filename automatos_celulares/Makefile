@@ -2,11 +2,33 @@
 CC=gcc
 
 # The options we will pass to the compiler.
-CSFLAGS=-c -Wall
+CSFLAGS=-Wall
 
 LIBS=-I /usr/include/SDL -lSDL
 
-all : cell_automata
+# all : cell_automata
+
+analyze: cell_automata_analyze
+
+analyze_gprof: cell_automata_analyze_gprof
+
+display: cell_automata
+
+run_gprof:
+	./exe/main_analyze_gprof
+	gprof ./exe/main_analyze_gprof gmon.out > analise.txt
+
+run:
+	./exe/main
+
+cell_automata_analyze: main_analyze.o cellular_automata.o
+	$(CC) obj/main_analyze.o obj/cellular_automata.o -o exe/main_analyze
+
+cell_automata_analyze_gprof:
+	$(CC) -g -pg src/main_analyze_gprof.c -o exe/main_analyze_gprof
+
+main_analyze.o: src/main_analyze.c
+	$(CC) $(CSFLAGS) src/main_analyze.c -o obj/main_analyze.o $(CSFLAGS)
 
 cell_automata: main.o cellular_automata.o cellular_automata_gfx.o 
 	$(CC) obj/main.o obj/cellular_automata.o obj/cellular_automata_gfx.o -o exe/main $(LIBS)
@@ -14,15 +36,14 @@ cell_automata: main.o cellular_automata.o cellular_automata_gfx.o
 cellular_automata.o: src/cellular_automata.c src/cellular_automata.h
 	$(CC) $(CSFLAGS) src/cellular_automata.c -o obj/cellular_automata.o
 
-cellular_automata_gfx.o: src/cellular_automata_gfx.c src/cellular_automata_gfx.h
-	$(CC) $(CSFLAGS) src/cellular_automata_gfx.c -o obj/cellular_automata_gfx.o
-
-main.o: src/main.c
-	$(CC) $(CSFLAGS) src/main.c -o obj/main.o
+main.o: src/cellular_automata.o
+	$(CC) $(CSFLAGS) src/main.c obj/main.o $(LIBS)
 
 clean:
 	rm -rf obj/*
 	rm -rf exe/*
+#rm analise.txt
+	rm gmon.out
 
 # Target that should install the dependencies in devian based linux distros.
 deb-deps:
