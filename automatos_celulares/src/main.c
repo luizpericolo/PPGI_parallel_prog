@@ -2,17 +2,19 @@
 #include<stdio.h>
 
 // Include for SDL stuff.
-#include<SDL/SDL.h>
+#include <SDL/SDL.h>
 
 // Including our lib-ish source headers.
 #include "cellular_automata.h"
 #include "cellular_automata_gfx.h"
 
+#include <time.h>
 
-int main(void)
+int main()
 {
 
     int *grid;
+    int i, n;
 
     // Creating the random initial population for the Cellular Automata.
     grid = create_random_initial_population(grid);
@@ -33,22 +35,42 @@ int main(void)
     //While the user hasn't quit
     while( quit == false )
     {
-        // Iterate on the grid once more.
-        grid = apply_cave_generation_rule(grid);
-        //grid = apply_4_5_rule(grid);
 
-        // Print the current iteration of the grid in the console.
-        print_grid(grid);
+        for(i=0; i<N_ITER;i++)
+        {
+            
+            // Creating the random initial population for the Cellular Automata.
+            grid = create_random_initial_population(grid);
 
-        // Paint it black!
-        SDL_FillRect(screen , NULL , 0x000000);
+            for(n=0; n<5; n++)
+            {
+                grid = apply_cave_generation_rule(grid);
 
-        screen = draw_grid(grid, screen);
+                //grid = apply_cave_generation_rule(grid);
+                //grid = apply_4_5_rule(grid);
 
-        SDL_Flip(screen);
+                // Print the current iteration of the grid in the console.
+                //print_grid(grid);
 
-        // Wait for 3.5 seconds.
-        SDL_Delay(1500);
+                // Paint it black!
+                SDL_FillRect(screen , NULL , 0x000000);
+
+                // Drawing the initial population in the first iteration.
+                screen = draw_grid(grid, screen);
+
+                SDL_Flip(screen);
+
+                // Wait for 3.5 seconds.
+                SDL_Delay(1500);
+
+                // Iterate on the grid once more.
+                grid = apply_cave_generation_rule(grid);
+            }
+
+        }
+
+        // Paint it red when all iterations have been made.
+        SDL_FillRect(screen , NULL , 0xff0000);
 
         //While there's an event to handle
         while( SDL_PollEvent( &event ) )
