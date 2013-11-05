@@ -14,12 +14,20 @@ analyze_gprof: cell_automata_analyze_gprof
 
 display: cell_automata
 
+threads: cell_automata_threads
+
 run_gprof:
 	./exe/main_analyze_gprof
 	gprof ./exe/main_analyze_gprof gmon.out > analise.txt
 
 run:
 	./exe/main
+
+run_ca_thread:
+	./exe/main_thread
+
+ca_thread:
+	$(CC) src/main_thread.c -o exe/main_thread -Wall -lpthread
 
 cell_automata_analyze: main_analyze.o cellular_automata.o
 	$(CC) obj/main_analyze.o obj/cellular_automata.o -o exe/main_analyze
