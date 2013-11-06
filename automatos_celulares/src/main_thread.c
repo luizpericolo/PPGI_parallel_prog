@@ -5,11 +5,11 @@
 #define N_THREADS 1
 
 #define N_ITER 5
+
 #define GRID_WIDTH 8
 #define GRID_HEIGHT 8
 #define CELL_COUNT GRID_WIDTH * GRID_HEIGHT
 #define FILL_PROB 45
-
 
 typedef struct pthread_params {
 	int id;
@@ -32,7 +32,6 @@ void print_name(int tid)
 	printf("Hi! I'm a thread and my name is %d\n", tid);
 }
 
-/* TO-DO: Passar uma struct aqui. */
 void *transition_cells(void *thread_params)
 {
 	pthread_params *params = (pthread_params*) thread_params;
@@ -54,6 +53,7 @@ void *transition_cells(void *thread_params)
 	printf("--Thread %d terminou.\n", params->id);
 	
 	free(params);
+
 	pthread_exit(NULL);
 }
 
