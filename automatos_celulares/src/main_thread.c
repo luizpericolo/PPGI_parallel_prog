@@ -4,10 +4,10 @@
 
 #define N_THREADS 8
 
-#define N_ITER 500
+#define N_ITER 5
 
-#define GRID_WIDTH 1024
-#define GRID_HEIGHT 512
+#define GRID_WIDTH 110
+#define GRID_HEIGHT 32
 #define CELL_COUNT GRID_WIDTH * GRID_HEIGHT
 #define FILL_PROB 45
 
@@ -223,7 +223,7 @@ void print_grid(int *grid)
         	if(grid[(i * GRID_WIDTH) + j] == 1)
             	printf("@");
            	else
-           		printf(" ");
+           		printf(".");
         }
 
         printf("\n");
@@ -289,9 +289,12 @@ int main(void)
     long long unsigned int clock;
     double tempo;
 
+    printf("(%d, %d, %d)\n\n", N_ITER, GRID_WIDTH, GRID_HEIGHT);
 
+    /*
     gettimeofday(&inicio, NULL);
     RDTSC(tsc1); 
+    */
 
 	current_gen = create_random_initial_population();
 	next_gen = malloc(CELL_COUNT * sizeof(int));
@@ -331,15 +334,17 @@ int main(void)
 		for(t=0; t<N_THREADS; t++)
 		{
 			pthread_join(tid[t], NULL);
-		}
+
+        }
 
 		current_gen = next_gen;
 		fill_borders(current_gen);
+        print_grid(current_gen);
 
-		//print_grid(current_gen);
 	}
 
-	RDTSC(tsc2);
+	/*
+    RDTSC(tsc2);
 	gettimeofday(&fim, NULL);
 
  	tempo = (fim.tv_sec - inicio.tv_sec) * 1000 + (fim.tv_sec - inicio.tv_sec)/1000;
@@ -350,6 +355,7 @@ int main(void)
     printf("Clock/tempo: %.2e\n\n", clock/tempo);
 
     print_grid(current_gen);
+    */
 
 	pthread_exit(NULL);
 }
