@@ -2,3 +2,4 @@ obj/
 exe/
 results/
 gmon.out
+/map_generator/images/generated/
