@@ -20,17 +20,24 @@ run_gprof:
 	./exe/main_analyze_gprof
 	gprof ./exe/main_analyze_gprof gmon.out > analise.txt
 
-run:
-	./exe/main
+run_analyze:
+	./exe/main_analyze
 
 run_ca_thread:
 	./exe/main_thread
 
+run_ca_thread_gprof:
+	./exe/main_thread_gprof
+	gprof ./exe/main_thread_gprof gmon.out > analise_thread.txt
+
 ca_thread:
 	$(CC) src/main_thread.c -o exe/main_thread -Wall -lpthread
 
-cell_automata_analyze: main_analyze.o cellular_automata.o
-	$(CC) obj/main_analyze.o obj/cellular_automata.o -o exe/main_analyze
+ca_thread_gprof:
+	$(CC) -g -pg src/main_thread.c -o exe/main_thread_gprof -lpthread
+
+cell_automata_analyze:
+	$(CC) $(CSFLAGS) src/main_analyze.c -o exe/main_analyze
 
 cell_automata_analyze_gprof:
 	$(CC) -g -pg src/main_analyze_gprof.c -o exe/main_analyze_gprof
