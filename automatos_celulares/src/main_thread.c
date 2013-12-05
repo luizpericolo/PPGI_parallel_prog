@@ -286,7 +286,7 @@ int main(void)
 	 */
 	pthread_t tid[N_THREADS];
 	int t;
-
+	int n_iter = 0;
 	struct timeval inicio, fim;
     tsc_counter tsc1, tsc2;
     long long unsigned int clock;
@@ -311,7 +311,7 @@ int main(void)
 	while(n_changes != 0)
 	{
         n_changes = 0;
-
+		n_iter++;
 		for(t=0; t<N_THREADS; t++)
 		{
 			pthread_params *params;
@@ -364,6 +364,7 @@ int main(void)
 
     print_grid(current_gen);
     */
-
+	
+	print ("Number of Iterations until stop: %d", n_iter);
 	pthread_exit(NULL);
 }
