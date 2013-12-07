@@ -37,8 +37,9 @@ def read_maps(filename):
 
     return map_data
 
-def start_game(filename):
+def start_game(filename, img_folder):
     import pygame
+    import os
 
     map_bundle = read_maps(filename)
     
@@ -50,7 +51,8 @@ def start_game(filename):
 
     screen = pygame.display.set_mode(size)
 
-    cell = pygame.image.load("./images/cell.bmp")
+
+    cell = pygame.image.load(os.path.join(img_folder,"cell.bmp"))
 
     cell_rect= cell.get_rect()
     while 1:
@@ -74,16 +76,20 @@ def start_game(filename):
                screen.blit(cell, pygame.Rect(pos[0],pos[1], cell_rect.width, cell_rect.height))
         pygame.display.flip()
         pygame.time.wait(1500)
-        pygame.image.save(screen, "./images/iteration_{0}.png".format(map_idx))
+        pygame.image.save(screen, os.path.join(img_folder,"generated/iteration_{0}.png".format(map_idx)))
         map_idx += 1
 
     pygame.quit()
 
 if __name__ == "__main__":
-    import sys
+    import sys, os
+
+    img_folder = os.path.join(os.path.dirname(__file__), "images")
+    gen_folder = os.path.join(img_folder, "generated")
 
     if len(sys.argv) != 2:
         print "Useage: python pygame_test.py <input_file_path>"
     else:
-        print sys.argv
-        start_game(sys.argv[1]);
+        if not os.path.exists(gen_folder):
+                os.mkdir(gen_folder)
+        start_game(filename=sys.argv[1], img_folder=img_folder)
