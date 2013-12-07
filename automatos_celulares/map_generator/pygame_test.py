@@ -47,14 +47,12 @@ def start_game(filename, img_folder):
     
     pygame.init()
 
-    size = width, height = 1280, 960
+    cell = pygame.image.load(os.path.join(img_folder,"cell.bmp"))
+    size = width, height = cell.get_width() * map_bundle['width'], cell.get_height() * map_bundle['height']
 
     screen = pygame.display.set_mode(size)
 
-
-    cell = pygame.image.load(os.path.join(img_folder,"cell.bmp"))
-
-    cell_rect= cell.get_rect()
+    cell_rect = cell.get_rect()
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
