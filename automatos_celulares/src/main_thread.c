@@ -47,6 +47,7 @@ void fill_borders(int *grid);
 
 int *current_gen;
 int *next_gen;
+int n_changes;
 
 void print_name(int tid)
 {
@@ -196,6 +197,7 @@ void apply_cave_generation_rule(int *grid, int startPos, int endPos)
         {
             if((n_count == 6) || (n_count == 7) || (n_count == 8))
                 next_gen[i] = 1;
+				n_changes++;
             else
                 next_gen[i] = grid[i];
         }
@@ -205,6 +207,7 @@ void apply_cave_generation_rule(int *grid, int startPos, int endPos)
         {
             if((n_count == 0) || (n_count == 1) || (n_count == 2))
                 next_gen[i] = 0;
+				n_changes++;
             else
                 next_gen[i] = grid[i];
         }
@@ -283,7 +286,7 @@ int main(void)
 	 */
 	pthread_t tid[N_THREADS];
 	int t;
-
+	int n_iter = 0;
 	struct timeval inicio, fim;
     tsc_counter tsc1, tsc2;
     long long unsigned int clock;
@@ -302,9 +305,14 @@ int main(void)
 	//print_grid(current_gen);	
 
 	int n;
-	for(n=0; n<N_ITER; n++)
+	//for(n=0; n<N_ITER; n++)
+	// Setando um valor != 0 pra nao falhar logo no primeiro loop do while.
+	n_changes = -1;
+	while(n_changes != 0)
 	{
-        for(t=0; t<N_THREADS; t++)
+        n_changes = 0;
+		n_iter++;
+		for(t=0; t<N_THREADS; t++)
 		{
 			pthread_params *params;
 			params = malloc(sizeof(pthread_params));
@@ -340,7 +348,7 @@ int main(void)
 		current_gen = next_gen;
 		fill_borders(current_gen);
         print_grid(current_gen);
-
+		
 	}
 
 	/*
@@ -356,6 +364,7 @@ int main(void)
 
     print_grid(current_gen);
     */
-
+	
+	print ("Number of Iterations until stop: %d", n_iter);
 	pthread_exit(NULL);
 }
