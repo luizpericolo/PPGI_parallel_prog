@@ -2,15 +2,6 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-#define N_THREADS 8
-
-#define N_ITER 5
-
-#define GRID_WIDTH 110
-#define GRID_HEIGHT 32
-#define CELL_COUNT GRID_WIDTH * GRID_HEIGHT
-#define FILL_PROB 45
-
 #include <sys/time.h>
 #include <time.h>
 
@@ -47,7 +38,18 @@ void fill_borders(int *grid);
 
 int *current_gen;
 int *next_gen;
-int n_changes;
+
+/* Simulation Variables: */
+int N_THREADS;// 8
+
+int N_ITER; //5
+int N_MAPS;// 500
+
+int GRID_WIDTH;// 110
+int GRID_HEIGHT;// 32
+int CELL_COUNT;// GRID_WIDTH * GRID_HEIGHT
+int FILL_PROB;// 45
+int N_SIM;
 
 void print_name(int tid)
 {
@@ -197,7 +199,6 @@ void apply_cave_generation_rule(int *grid, int startPos, int endPos)
         {
             if((n_count == 6) || (n_count == 7) || (n_count == 8))
                 next_gen[i] = 1;
-				n_changes++;
             else
                 next_gen[i] = grid[i];
         }
@@ -207,7 +208,6 @@ void apply_cave_generation_rule(int *grid, int startPos, int endPos)
         {
             if((n_count == 0) || (n_count == 1) || (n_count == 2))
                 next_gen[i] = 0;
-				n_changes++;
             else
                 next_gen[i] = grid[i];
         }
@@ -253,8 +253,6 @@ int* create_random_initial_population()
 
     int *grid = malloc(CELL_COUNT * sizeof(int));
 
-    srand(time(NULL));
-
     int i = 0;
 
     int count = 0;
@@ -277,94 +275,102 @@ int* create_random_initial_population()
 }
 
 
-int main(void)
+int main(int argc, char* argv[])
 {
 	/* 
 		This implementation creates N_THREADS threads for each iteration of the algorithm.
 		This works as a 'default' barrier implementation. We wait for all threads to exit before we start
 		the next iteration of the algorithm, so we can say that the algorithm implements a natural synchronization.
 	 */
+
+    if(argc < 7)
+    {
+        printf("[Error]\n");
+        printf("Useage: %s <n_threads> <n_sim> <n_maps> <grid_width> <grid_height> <fill_prob>\n", argv[0]);
+        return 1;
+    }
+    else
+    {
+        N_THREADS = atoi(argv[1]);
+        N_SIM = atoi(argv[2]);
+        N_MAPS = atoi(argv[3]);
+        GRID_WIDTH = atoi(argv[4]);
+        GRID_HEIGHT = atoi(argv[5]);
+        FILL_PROB = atoi(argv[6]);
+
+        CELL_COUNT = GRID_WIDTH * GRID_HEIGHT;
+
+        // Literature says so...
+        N_ITER = 5;
+    }
+
+
+    srand(time(NULL));
 	pthread_t tid[N_THREADS];
-	int t;
-	int n_iter = 0;
+	int i, n, t, s;
 	struct timeval inicio, fim;
     tsc_counter tsc1, tsc2;
     long long unsigned int clock;
-    double tempo;
+    double tempo, tempo_total;
 
     printf("(%d, %d, %d)\n\n", N_ITER, GRID_WIDTH, GRID_HEIGHT);
 
-    /*
-    gettimeofday(&inicio, NULL);
-    RDTSC(tsc1); 
-    */
+    for(s=0; s<N_SIM; s++)
+    {
+        gettimeofday(&inicio, NULL);
+        RDTSC(tsc1); 
 
-	current_gen = create_random_initial_population();
-	next_gen = malloc(CELL_COUNT * sizeof(int));
-	fill_borders(current_gen);
-	//print_grid(current_gen);	
+        for(i=0; i<N_MAPS; i++)
+        {
+            current_gen = create_random_initial_population();
+        	next_gen = malloc(CELL_COUNT * sizeof(int));
+        	fill_borders(current_gen);
 
-	int n;
-	//for(n=0; n<N_ITER; n++)
-	// Setando um valor != 0 pra nao falhar logo no primeiro loop do while.
-	n_changes = -1;
-	while(n_changes != 0)
-	{
-        n_changes = 0;
-		n_iter++;
-		for(t=0; t<N_THREADS; t++)
-		{
-			pthread_params *params;
-			params = malloc(sizeof(pthread_params));
-			params->id = t;
-			/*
-			//B678
-			params->n_born = 3;
-			params->born = malloc(3 * sizeof(int));
-			params->born[0] = 6;
-			params->born[1] = 7;
-			params->born[2] = 8;
-			
-			///S345678
-			params->n_survive = 6;
-			params->survive = malloc(4 * sizeof(int));
-			params->survive[0] = 3;
-			params->survive[1] = 4;
-			params->survive[2] = 5;
-			params->survive[3] = 6;
-			params->survive[4] = 7;
-			params->survive[5] = 8;
-			*/
-			
-			pthread_create(&tid[t], NULL, transition_cells, (void*) params);
-		}
+        	for(n=0; n<N_ITER; n++)
+        	{
+        		for(t=0; t<N_THREADS; t++)
+        		{
+        			pthread_params *params;
+        			params = malloc(sizeof(pthread_params));
+        			params->id = t;
 
-		for(t=0; t<N_THREADS; t++)
-		{
-			pthread_join(tid[t], NULL);
+        			pthread_create(&tid[t], NULL,
+                        transition_cells, (void*) params);
+        		}
 
+        		for(t=0; t<N_THREADS; t++)
+        		{
+        			pthread_join(tid[t], NULL);
+
+                }
+
+        		current_gen = next_gen;
+        		fill_borders(current_gen);
+                //print_grid(current_gen);
+        		
+        	}
+
+            //printf("Mapa #%d:\n", i+1);
+            //print_grid(current_gen);
+            free(current_gen);
+            //free(next_gen);
         }
 
-		current_gen = next_gen;
-		fill_borders(current_gen);
-        print_grid(current_gen);
-		
-	}
+        RDTSC(tsc2);
+        gettimeofday(&fim, NULL);
 
-	/*
-    RDTSC(tsc2);
-	gettimeofday(&fim, NULL);
+        printf("Run #%d\n", s);
+        tempo = (fim.tv_sec - inicio.tv_sec) * 1000 + (fim.tv_sec - inicio.tv_sec)/1000;
+        tempo_total += tempo;
+        printf("Tempo: %.2lf\n", tempo);
 
- 	tempo = (fim.tv_sec - inicio.tv_sec) * 1000 + (fim.tv_sec - inicio.tv_sec)/1000;
-    printf("Tempo: %.2lf\n", tempo);
+        clock = tsc2.int64 - tsc1.int64;
+        printf("Tempo: %.2lf(ms) Clocks: %.2e\n", tempo/N_MAPS, (double)clock/N_ITER);
+        printf("Clock/tempo: %.2e\n\n", clock/tempo);
+    }
 
-    clock = tsc2.int64 - tsc1.int64;
-    printf("Tempo: %.2lf(ms) Clocks: %.2e\n", tempo/N_ITER, (double)clock/N_ITER);
-    printf("Clock/tempo: %.2e\n\n", clock/tempo);
-
-    print_grid(current_gen);
-    */
+    printf("Tempo Total: %.2lf\n", tempo_total);
+    printf("Tempo médio: %.2lf\n", (double) tempo_total/N_SIM);
 	
-	print ("Number of Iterations until stop: %d", n_iter);
 	pthread_exit(NULL);
 }
