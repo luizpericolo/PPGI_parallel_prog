@@ -16,6 +16,12 @@ display: cell_automata
 
 threads: cell_automata_threads
 
+ca_thread_barr:
+	$(CC) src/main_thread_barr.c -o exe/main_thread_barr -Wall -lpthread
+
+run_ca_thread_barr:
+	./exe/main_thread_barr
+
 run_gprof:
 	./exe/main_analyze_gprof
 	gprof ./exe/main_analyze_gprof gmon.out > analise.txt
@@ -23,8 +29,223 @@ run_gprof:
 run_analyze:
 	./exe/main_analyze
 
-run_ca_thread:
-	./exe/main_thread
+run_analyze_tests:
+	make run_analyze_5
+	make run_analyze_10
+	make run_analyze_15
+	make run_analyze_20
+
+run_analyze_10:
+	echo "Running: sequential, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_analyze 10 250 256 64 45 > results/sequential/seq_10_250.out
+
+	echo "Running: sequential, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_analyze 10 500 256 64 45 > results/sequential/seq_10_500.out
+
+	echo "Running: sequential, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_analyze 10 1000 256 64 45 > results/sequential/seq_10_1000.out
+
+run_analyze_20:
+	echo "Running: sequential, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_analyze 20 250 256 64 45 > results/sequential/seq_20_250.out
+
+	echo "Running: sequential, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_analyze 20 500 256 64 45 > results/sequential/seq_20_500.out
+
+	echo "Running: sequential, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_analyze 20 1000 256 64 45 > results/sequential/seq_20_1000.out
+
+run_ca_thread_10:
+	echo "Running: 1 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 1 10 250 256 64 45 > results/thread/thread_10_250_01_256_64.out
+	
+	echo "Running: 2 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 2 10 250 256 64 45 > results/thread/thread_10_250_02_256_64.out
+	
+	echo "Running: 4 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 4 10 250 256 64 45 > results/thread/thread_10_250_04_256_64.out
+	
+	echo "Running: 8 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 8 10 250 256 64 45 > results/thread/thread_10_250_08_256_64.out
+
+	echo "Running: 16 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 16 10 250 256 64 45 > results/thread/thread_10_250_16_256_64.out
+
+
+	echo "Running: 1 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 1 10 500 256 64 45 > results/thread/thread_10_500_01_256_64.out
+	
+	echo "Running: 2 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 2 10 500 256 64 45 > results/thread/thread_10_500_02_256_64.out
+	
+	echo "Running: 4 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 4 10 500 256 64 45 > results/thread/thread_10_500_04_256_64.out
+	
+	echo "Running: 8 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 8 10 500 256 64 45 > results/thread/thread_10_500_08_256_64.out
+
+	echo "Running: 16 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 16 10 500 256 64 45 > results/thread/thread_10_500_16_256_64.out
+
+
+	echo "Running: 1 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 1 10 1000 256 64 45 > results/thread/thread_10_1000_01_256_64.out
+	
+	echo "Running: 2 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 2 10 1000 256 64 45 > results/thread/thread_10_1000_02_256_64.out
+	
+	echo "Running: 4 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 4 10 1000 256 64 45 > results/thread/thread_10_1000_04_256_64.out
+	
+	echo "Running: 8 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 8 10 1000 256 64 45 > results/thread/thread_10_1000_08_256_64.out
+
+	echo "Running: 16 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 16 10 1000 256 64 45 > results/thread/thread_10_1000_16_256_64.out
+
+run_ca_thread_20:
+	echo "Running: 1 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 1 20 250 256 64 45 > results/thread/thread_20_250_01_256_64.out
+	
+	echo "Running: 2 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 2 20 250 256 64 45 > results/thread/thread_20_250_02_256_64.out
+	
+	echo "Running: 4 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 4 20 250 256 64 45 > results/thread/thread_20_250_04_256_64.out
+	
+	echo "Running: 8 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 8 20 250 256 64 45 > results/thread/thread_20_250_08_256_64.out
+
+	echo "Running: 16 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 16 20 250 256 64 45 > results/thread/thread_20_250_16_256_64.out
+
+
+	echo "Running: 1 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 1 20 500 256 64 45 > results/thread/thread_20_500_01_256_64.out
+	
+	echo "Running: 2 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 2 20 500 256 64 45 > results/thread/thread_20_500_02_256_64.out
+	
+	echo "Running: 4 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 4 20 500 256 64 45 > results/thread/thread_20_500_04_256_64.out
+	
+	echo "Running: 8 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 8 20 500 256 64 45 > results/thread/thread_20_500_08_256_64.out
+
+	echo "Running: 16 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 16 20 500 256 64 45 > results/thread/thread_20_500_16_256_64.out
+
+
+	echo "Running: 1 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 1 20 1000 256 64 45 > results/thread/thread_20_1000_01_256_64.out
+	
+	echo "Running: 2 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 2 20 1000 256 64 45 > results/thread/thread_20_1000_02_256_64.out
+	
+	echo "Running: 4 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 4 20 1000 256 64 45 > results/thread/thread_20_1000_04_256_64.out
+	
+	echo "Running: 8 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 8 20 1000 256 64 45 > results/thread/thread_20_1000_08_256_64.out
+
+	echo "Running: 16 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread 16 20 1000 256 64 45 > results/thread/thread_20_1000_16_256_64.out
+
+run_ca_thread_barr_10:
+	echo "Running: 1 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 1 10 250 256 64 45 > results/thread/thread_barr_10_250_01_256_64.out
+	
+	echo "Running: 2 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 2 10 250 256 64 45 > results/thread/thread_barr_10_250_02_256_64.out
+	
+	echo "Running: 4 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 4 10 250 256 64 45 > results/thread/thread_barr_10_250_04_256_64.out
+	
+	echo "Running: 8 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 8 10 250 256 64 45 > results/thread/thread_barr_10_250_08_256_64.out
+
+	echo "Running: 16 threads, 10 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 16 10 250 256 64 45 > results/thread/thread_barr_10_250_16_256_64.out
+
+
+	echo "Running: 1 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 1 10 500 256 64 45 > results/thread/thread_barr_10_500_01_256_64.out
+	
+	echo "Running: 2 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 2 10 500 256 64 45 > results/thread/thread_barr_10_500_02_256_64.out
+	
+	echo "Running: 4 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 4 10 500 256 64 45 > results/thread/thread_barr_10_500_04_256_64.out
+	
+	echo "Running: 8 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 8 10 500 256 64 45 > results/thread/thread_barr_10_500_08_256_64.out
+
+	echo "Running: 16 threads, 10 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 16 10 500 256 64 45 > results/thread/thread_barr_10_500_16_256_64.out
+
+
+	echo "Running: 1 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 1 10 1000 256 64 45 > results/thread/thread_barr_10_1000_01_256_64.out
+	
+	echo "Running: 2 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 2 10 1000 256 64 45 > results/thread/thread_barr_10_1000_02_256_64.out
+	
+	echo "Running: 4 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 4 10 1000 256 64 45 > results/thread/thread_barr_10_1000_04_256_64.out
+	
+	echo "Running: 8 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 8 10 1000 256 64 45 > results/thread/thread_barr_10_1000_08_256_64.out
+
+	echo "Running: 16 threads, 10 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 16 10 1000 256 64 45 > results/thread/thread_barr_10_1000_16_256_64.out
+
+run_ca_thread_barr_20:
+	echo "Running: 1 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 1 20 250 256 64 45 > results/thread/thread_barr_20_250_01_256_64.out
+	
+	echo "Running: 2 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 2 20 250 256 64 45 > results/thread/thread_barr_20_250_02_256_64.out
+	
+	echo "Running: 4 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 4 20 250 256 64 45 > results/thread/thread_barr_20_250_04_256_64.out
+	
+	echo "Running: 8 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 8 20 250 256 64 45 > results/thread/thread_barr_20_250_08_256_64.out
+
+	echo "Running: 16 threads, 20 runs, 250 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 16 20 250 256 64 45 > results/thread/thread_barr_20_250_16_256_64.out
+
+
+	echo "Running: 1 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 1 20 500 256 64 45 > results/thread/thread_barr_20_500_01_256_64.out
+	
+	echo "Running: 2 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 2 20 500 256 64 45 > results/thread/thread_barr_20_500_02_256_64.out
+	
+	echo "Running: 4 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 4 20 500 256 64 45 > results/thread/thread_barr_20_500_04_256_64.out
+	
+	echo "Running: 8 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 8 20 500 256 64 45 > results/thread/thread_barr_20_500_08_256_64.out
+
+	echo "Running: 16 threads, 20 runs, 500 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 16 20 500 256 64 45 > results/thread/thread_barr_20_500_16_256_64.out
+
+
+	echo "Running: 1 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 1 20 1000 256 64 45 > results/thread/thread_barr_20_1000_01_256_64.out
+	
+	echo "Running: 2 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 2 20 1000 256 64 45 > results/thread/thread_barr_20_1000_02_256_64.out
+	
+	echo "Running: 4 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 4 20 1000 256 64 45 > results/thread/thread_barr_20_1000_04_256_64.out
+	
+	echo "Running: 8 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 8 20 1000 256 64 45 > results/thread/thread_barr_20_1000_08_256_64.out
+
+	echo "Running: 16 threads, 20 runs, 1000 maps, width: 256, height: 64, fill: 45%"
+	./exe/main_thread_barr 16 20 1000 256 64 45 > results/thread/thread_barr_20_1000_16_256_64.out
 
 run_ca_thread_gprof:
 	./exe/main_thread_gprof
