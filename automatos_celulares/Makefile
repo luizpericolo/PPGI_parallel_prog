@@ -4,6 +4,12 @@ CC=gcc
 # The options we will pass to the compiler.
 CSFLAGS=-Wall
 
+# Cuda flags
+CUFLAGS= -arch=sm_21
+
+# Cuda compiler
+CU=nvcc
+
 LIBS=-I /usr/include/SDL -lSDL
 
 # all : cell_automata
@@ -15,6 +21,12 @@ analyze_gprof: cell_automata_analyze_gprof
 display: cell_automata
 
 threads: cell_automata_threads
+
+ca_gpu:
+	$(CU) src/main_gpu.cu -o exe/main_gpu $(CUFLAGS)	
+
+run_ca_gpu:
+	./exe/main_gpu
 
 ca_thread_barr:
 	$(CC) src/main_thread_barr.c -o exe/main_thread_barr -Wall -lpthread
