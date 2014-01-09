@@ -22,6 +22,16 @@ display: cell_automata
 
 threads: cell_automata_threads
 
+make_run_gpu: ca_gpu run_ca_gpu
+
+build_run_mpi: build_mpi run_mpi
+
+build_mpi:
+	mpicc src/main_mpi.c -o exe/main_mpi
+
+run_mpi:
+	mpirun -np 4 ./exe/main_mpi
+
 ca_gpu:
 	$(CU) src/main_gpu.cu -o exe/main_gpu $(CUFLAGS)	
 
